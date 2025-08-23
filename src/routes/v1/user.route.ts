@@ -41,4 +41,17 @@ userRouter.delete('/delete/:id', async (c) => {
 	return c.json(createResponse(null, 'User deleted successfully'));
 });
 
+userRouter.get('/get/:id', async (c) => {
+	const id = c.req.param('id');
+	const userService = new UserService();
+	if (!id) {
+		throw new AppError('User id is required', 400, 'INVALID_INPUT');
+	}
+	const user = await userService.getUserById(id, c);
+	if (!user) {
+		throw new AppError('User not found', 404, 'USER_NOT_FOUND');
+	}
+
+	return c.json(createResponse(user, 'User fetched successfully'));
+});
 export { userRouter };
