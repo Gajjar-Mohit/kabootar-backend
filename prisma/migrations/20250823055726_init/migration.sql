@@ -1,10 +1,10 @@
 -- CreateTable
 CREATE TABLE "public"."User" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
-    "email" TEXT,
-    "phone" TEXT,
-    "profileUrl" TEXT,
+    "id" STRING NOT NULL,
+    "name" STRING NOT NULL,
+    "email" STRING,
+    "phone" STRING,
+    "profileUrl" STRING,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -13,20 +13,20 @@ CREATE TABLE "public"."User" (
 
 -- CreateTable
 CREATE TABLE "public"."Message" (
-    "id" TEXT NOT NULL,
-    "text" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
+    "id" STRING NOT NULL,
+    "text" STRING NOT NULL,
+    "userId" STRING NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "conversationId" TEXT NOT NULL,
+    "conversationId" STRING NOT NULL,
 
     CONSTRAINT "Message_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "public"."Conversation" (
-    "id" TEXT NOT NULL,
-    "name" TEXT NOT NULL,
+    "id" STRING NOT NULL,
+    "name" STRING NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -35,14 +35,15 @@ CREATE TABLE "public"."Conversation" (
 
 -- CreateTable
 CREATE TABLE "public"."_ConversationToUser" (
-    "A" TEXT NOT NULL,
-    "B" TEXT NOT NULL,
-
-    CONSTRAINT "_ConversationToUser_AB_pkey" PRIMARY KEY ("A","B")
+    "A" STRING NOT NULL,
+    "B" STRING NOT NULL
 );
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User_email_key" ON "public"."User"("email");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "_ConversationToUser_AB_unique" ON "public"."_ConversationToUser"("A", "B");
 
 -- CreateIndex
 CREATE INDEX "_ConversationToUser_B_index" ON "public"."_ConversationToUser"("B");

@@ -1,8 +1,9 @@
-import { Router } from "express";
-import userRouter from "./v1/user.router";
+import { Hono } from "hono";
+import { Variables } from "hono/types";
+import { userRouter } from "./v1/user.route";
 
-const router = Router();
+const routes = new Hono<{  }>();
 
-router.get("/user", userRouter);
+routes.route('/user', userRouter);
 
-export default router;
+export { routes };
