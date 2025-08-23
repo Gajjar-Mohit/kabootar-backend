@@ -4,11 +4,11 @@ import { UserService } from '../../service/user.service';
 import { CreateUserSchema } from '../../schema/user';
 import { createResponse } from '../../utils/response';
 import { Env } from '../../utils/env';
+import { AppError } from '../../utils/errors';
 
 const userRouter = new Hono<{ Bindings: Env }>();
 
 userRouter.post('/register', async (c) => {
-	console.log(await c.req.json());
 	const body = await c.req.json();
 	const request = CreateUserSchema.safeParse(body);
 	if (!request.success) {
@@ -20,10 +20,25 @@ userRouter.post('/register', async (c) => {
 			name: request.data.name,
 			email: request.data.email,
 			phone: request.data.phone,
+			publicKey: request.data.publicKey,
 		},
 		c
 	);
 	return c.json(createResponse(user, 'User created successfully'));
+});
+
+userRouter.delete('/delete/:id', async (c) => {
+	const id = c.req.param('id');
+	const userService = new UserService();
+	if (!id) {
+		throw new AppError('User id is required', 400, 'INVALID_INPUT');
+	}
+	const deleted = await userService.deleteUser(id, c);
+	if (!deleted) {
+		throw new AppError('User not found', 404, 'USER_NOT_FOUND');
+	}
+
+	return c.json(createResponse(null, 'User deleted successfully'));
 });
 
 export { userRouter };

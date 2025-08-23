@@ -1,10 +1,8 @@
-
 import { Context } from 'hono';
 import { getPrisma } from '../db';
 import { CreateUser } from '../types/user';
 import { AppError } from '../utils/errors';
 import { Env } from '../utils/env';
-import { env } from 'hono/adapter';
 
 export class UserService {
 	async createUser(user: CreateUser, c: Context<{ Bindings: Env }>) {
@@ -32,6 +30,7 @@ export class UserService {
 					name: user.name,
 					email: user.email,
 					phone: user.phone,
+					publickey: user.publicKey,
 				},
 			});
 			return newUser;
@@ -39,9 +38,9 @@ export class UserService {
 			throw new AppError('Failed to create user: ' + error, 500, 'DATABASE_ERROR');
 		}
 	}
-	async getUserById(id: string) {
+	async getUserById(id: string, c: Context<{ Bindings: Env }>) {
 		try {
-			const prisma = getPrisma(process.env.DATABASE_URL!);
+			const prisma = getPrisma(c.env.DATABASE_URL!);
 			const user = await prisma.user.findUnique({
 				where: {
 					id,
@@ -50,6 +49,21 @@ export class UserService {
 			return user;
 		} catch (error) {
 			throw new AppError('Failed to fetch user', 500, 'DATABASE_ERROR');
+		}
+	}
+
+	async deleteUser(id: string, c: Context<{ Bindings: Env }>) {
+		try {
+			const prisma = getPrisma(c.env.DATABASE_URL!);
+			const result = await prisma.user.delete({
+				where: {
+					id,
+				},
+			});
+			return result;
+		} catch (error) {
+			console.log(error);
+			throw new AppError('Failed to delete user', 500, 'DATABASE_ERROR');
 		}
 	}
 }
