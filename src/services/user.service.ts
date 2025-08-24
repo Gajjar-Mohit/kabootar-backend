@@ -7,7 +7,7 @@ export const createUserSerivce = async (
   phone: string,
   profileUrl: string,
   bio: string,
-  publickey:string
+  publickey: string
 ) => {
   try {
     const userExists = await User.findOne({ email });
@@ -21,7 +21,7 @@ export const createUserSerivce = async (
       phone,
       profileUrl,
       bio,
-      publickey
+      publickey,
     });
 
     return user;
@@ -45,7 +45,7 @@ export const getUserByIdService = async (customId: string) => {
 
 export const deleteUserService = async (id: string) => {
   try {
-    const user = await User.findOne({ id });
+    const user = await User.findOne({ _id: id });
     if (!user) {
       throw new CustomError("User not found", 404);
     }

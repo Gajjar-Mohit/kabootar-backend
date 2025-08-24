@@ -3,30 +3,18 @@ import type { IUser } from "./users";
 
 // Interface extending Document for better TypeScript support
 export interface IMessage extends Document {
-  id: ObjectId;
   text: string;
   sender: Types.ObjectId | IUser;
   recipient: Types.ObjectId | IUser;
-  timestamp: Date;
   read: boolean;
   delivered: boolean;
   messageType?: "text" | "image" | "file" | "audio";
-  editedAt?: Date;
-  deletedAt?: Date;
-  replyTo?: Types.ObjectId;
   createdAt?: Date;
-  updatedAt?: Date;
 }
 
 // Schema definition
 const MessageSchema = new Schema<IMessage>(
   {
-    id: {
-      type: String,
-      required: [true, "Message ID is required"],
-      unique: true,
-      index: true,
-    },
     text: {
       type: String,
       required: [true, "Message text is required"],
@@ -45,12 +33,6 @@ const MessageSchema = new Schema<IMessage>(
       required: [true, "Recipient is required"],
       index: true,
     },
-    timestamp: {
-      type: Date,
-      default: Date.now,
-      required: true,
-      index: true,
-    },
     read: {
       type: Boolean,
       default: false,
@@ -65,16 +47,6 @@ const MessageSchema = new Schema<IMessage>(
       type: String,
       enum: ["text", "image", "file", "audio"],
       default: "text",
-    },
-    editedAt: {
-      type: Date,
-    },
-    deletedAt: {
-      type: Date,
-    },
-    replyTo: {
-      type: Schema.Types.ObjectId,
-      ref: "Message",
     },
   },
   {
