@@ -1,19 +1,19 @@
-import { Context, Hono } from 'hono';
-import { poweredBy } from 'hono/powered-by';
-import { prettyJSON } from 'hono/pretty-json';
-import { routes } from './routes';
-import { Variables } from 'hono/types';
-import { createResponse } from './utils/response';
-type Bindings = {};
+import express from "express";
+import { errorHandler } from "./utils/error-handler";
+import router from "./routes";
+const app = express();
 
-const app = new Hono<{ Variables: Variables, Bindings: Bindings }>();
-
-app.use('*', poweredBy());
-app.use('*', prettyJSON());
-app.onError((err, c) => {
-	console.error(`${err}`);
-    return c.json(createResponse(err.message), 500);
+app.use((req, res, next) => {
+  console.log(req.method, req.url);
+  next();
 });
-app.route("/api/v1", routes);
 
-export default app;
+app.use(express.json());
+
+app.use("/api/v1", router);
+
+app.use(errorHandler);
+
+app.listen(process.env.PORT, () => {
+  console.log("Server is running on port " + process.env.PORT);
+});

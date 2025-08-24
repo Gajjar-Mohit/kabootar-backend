@@ -1,11 +1,10 @@
-import { Hono } from "hono";
-import { Variables } from "hono/types";
-import { userRouter } from "./v1/user.route";
-import { chatRouter } from "./v1/chat.route";
+import { Router } from "express";
+import chatRouter from "./v1/chat.router";
+import userRouter from "./v1/user.router";
 
-const routes = new Hono<{  }>();
+const router = Router();
 
-routes.route('/user', userRouter);
-routes.route('/chat', chatRouter);
+router.use("/user", userRouter);
+router.use("/chat", chatRouter);
 
-export { routes };
+export default router;
