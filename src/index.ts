@@ -1,6 +1,7 @@
 import express from "express";
 import { errorHandler } from "./utils/error-handler";
 import router from "./routes";
+import { connect } from "./db/db";
 const app = express();
 
 app.use((req, res, next) => {
@@ -14,6 +15,7 @@ app.use("/api/v1", router);
 
 app.use(errorHandler);
 
-app.listen(process.env.PORT, () => {
+app.listen(process.env.PORT, async () => {
+  await connect();
   console.log("Server is running on port " + process.env.PORT);
 });

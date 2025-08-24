@@ -6,4 +6,5 @@ export const UserCreateRequest = z.object({
   phone: z.string().optional(),
   profileUrl: z.string().optional(),
   bio: z.string().optional(),
+  publickey: z.string(),
 });

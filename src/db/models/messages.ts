@@ -1,9 +1,9 @@
-import { Schema, model, Document, Types } from "mongoose";
+import { Schema, model, Document, Types, type ObjectId } from "mongoose";
 import type { IUser } from "./users";
 
 // Interface extending Document for better TypeScript support
 export interface IMessage extends Document {
-  id: string;
+  id: ObjectId;
   text: string;
   sender: Types.ObjectId | IUser;
   recipient: Types.ObjectId | IUser;

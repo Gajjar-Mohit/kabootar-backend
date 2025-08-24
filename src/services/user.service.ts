@@ -1,29 +1,29 @@
-import { disconnect, getDb } from "../db/db";
+import { mongo, Types } from "mongoose";
 import { CustomError } from "../utils/error-handler";
+import { User, type IUser } from "../db/models/users";
 export const createUserSerivce = async (
   name: string,
   email: string,
   phone: string,
   profileUrl: string,
-  bio: string
+  bio: string,
+  publickey:string
 ) => {
   try {
-    const db = await getDb();
-    const userExists = await db
-      .collection("users")
-      .findOne({ email: email.toLowerCase() });
+    const userExists = await User.findOne({ email });
     if (userExists) {
       throw new CustomError("User already exists", 400);
     }
 
-    const user = await db.collection("users").insertOne({
+    const user = await User.insertOne({
       name,
       email,
       phone,
       profileUrl,
       bio,
+      publickey
     });
-    await disconnect();
+
     return user;
   } catch (error) {
     console.error(error);
@@ -31,13 +31,11 @@ export const createUserSerivce = async (
   }
 };
 
-export const getUserByIdService = async (id: string) => {
+export const getUserByIdService = async (customId: string) => {
   try {
-    console.log("UseridL " + id);
-    const db = await getDb();
-    const user = await db.collection("users").findOne({ id });
+    console.log("Custom UserId: " + customId);
+    const user = await User.findOne({ _id: customId });
     console.log(user);
-    await disconnect();
     return user;
   } catch (error) {
     console.error(error);
@@ -47,13 +45,12 @@ export const getUserByIdService = async (id: string) => {
 
 export const deleteUserService = async (id: string) => {
   try {
-    const db = await getDb();
-    const user = await db.collection("users").findOne({ id });
+    const user = await User.findOne({ id });
     if (!user) {
       throw new CustomError("User not found", 404);
     }
-    await db.collection("users").deleteOne({ id });
-    await disconnect();
+    await User.deleteOne({ id });
+
     return user;
   } catch (error) {
     console.error(error);

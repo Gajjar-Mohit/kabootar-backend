@@ -1,4 +1,4 @@
-import { getDb } from "../db/db";
+
 import type { Request, Response, NextFunction } from "express";
 import { UserCreateRequest } from "../types/user.type";
 import {
@@ -7,19 +7,19 @@ import {
   getUserByIdService,
 } from "../services/user.service";
 import { CustomError } from "../utils/error-handler";
-import { success } from "zod";
 
 export const createUserController = async (req: Request, res: Response) => {
   const parsedBody = UserCreateRequest.safeParse(req.body);
   if (parsedBody.success) {
-    const { name, email, phone, profileUrl, bio } = parsedBody.data;
+    const { name, email, phone, profileUrl, bio, publickey } = parsedBody.data;
     try {
       const newUser = await createUserSerivce(
         name,
         email,
         phone || "",
         profileUrl || "",
-        bio || ""
+        bio || "",
+        publickey
       );
       res.status(201).json({
         success: true,
