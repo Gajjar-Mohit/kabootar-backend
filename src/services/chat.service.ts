@@ -48,3 +48,32 @@ export const messageService = async (
     throw new CustomError(String(error));
   }
 };
+
+export const getMessagesByUserIdService = async (userId: string) => {
+  console.log(userId);
+  if (!userId) {
+    throw new CustomError("UserId is required", 400);
+  }
+
+  try {
+    const messages = await Message.find({
+      $or: [
+        {
+          sender: {
+            _id: userId,
+          },
+        },
+        {
+          recipient: {
+            _id: userId,
+          },
+        },
+      ],
+    });
+
+    return messages;
+  } catch (error) {
+    console.log(error);
+    throw new CustomError(String(error), 500);
+  }
+};
