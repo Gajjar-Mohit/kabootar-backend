@@ -1,12 +1,11 @@
-
 import type { Request, Response, NextFunction } from "express";
-import { UserCreateRequest } from "../types/user.type";
+import { UserCreateRequest } from "../../types/user.type";
 import {
   createUserSerivce,
   deleteUserService,
   getUserByIdService,
-} from "../services/user.service";
-import { CustomError } from "../utils/error-handler";
+} from "../../services/user.service";
+import { CustomError } from "../../utils/error-handler";
 
 export const createUserController = async (req: Request, res: Response) => {
   const parsedBody = UserCreateRequest.safeParse(req.body);

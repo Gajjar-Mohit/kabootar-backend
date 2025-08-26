@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { asyncHandler } from "../../utils/route-wrapper";
+import { asyncHandler } from "../../../utils/route-wrapper";
 import {
   getConversationsByUserIdController,
   getMessagesByUserIdController,

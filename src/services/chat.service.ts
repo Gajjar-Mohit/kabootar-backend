@@ -1,5 +1,6 @@
+
 import { Message, type IMessage } from "../db/models/messages";
-import { User, type IUser } from "../db/models/users";
+import type { IUser } from "../db/models/users";
 import { CustomError } from "../utils/error-handler";
 import { getUserByIdService } from "./user.service";
 

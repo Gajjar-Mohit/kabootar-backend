@@ -1,6 +1,6 @@
-import { mongo, Types } from "mongoose";
+import { User } from "../db/models/users";
 import { CustomError } from "../utils/error-handler";
-import { User, type IUser } from "../db/models/users";
+
 export const createUserSerivce = async (
   name: string,
   email: string,

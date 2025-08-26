@@ -1,11 +1,11 @@
 import type { Request, Response, NextFunction } from "express";
-import { MessageRequest } from "../types/chat.type";
+import { MessageRequest } from "../../types/chat.type";
 import {
   getConversationsByUserId,
   getMessagesByUserIdAndRecipientId,
   messageService,
-} from "../services/chat.service";
-import { CustomError } from "../utils/error-handler";
+} from "../../services/chat.service";
+import { CustomError } from "../../utils/error-handler";
 import { success } from "zod";
 
 export const messageController = async (req: Request, res: Response) => {
@@ -41,7 +41,6 @@ export const getMessagesByUserIdController = async (
   req: Request,
   res: Response
 ) => {
-  
   if (!req.body) {
     res.status(400).json({
       success: false,
@@ -74,19 +73,18 @@ export const getMessagesByUserIdController = async (
       recipientId
     );
 
-    
     if (!messages || messages.length === 0) {
       res.status(404).json({
         success: false,
         message: "No Messages found",
         error: "Empty",
       });
-      return; 
+      return;
     }
 
     res.status(200).json({
       success: true,
-      message: "Messages fetched successfully", 
+      message: "Messages fetched successfully",
       data: messages,
     });
   } catch (error) {
@@ -116,13 +114,7 @@ export const getConversationsByUserIdController = async (
 
   try {
     const messages = await getConversationsByUserId(id);
-    
-    
-    
-    
-    
-    
-    
+
     res.status(200).json({
       success: true,
       messages: "Messages fetched successfully",
