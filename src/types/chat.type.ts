@@ -6,3 +6,5 @@ export const MessageRequest = z.object({
   recipient: z.string(),
   messageType: z.enum(["text", "image", "file", "audio"]),
 });
+
+

@@ -4,6 +4,7 @@ import type {
   ConnectionsMap,
   WebSocketMessage,
 } from "../types/ws.type";
+import { messageService } from "../services/chat.service";
 
 export const handleWebSocketMessage = (
   ws: WebSocketConnection,
@@ -98,29 +99,38 @@ const handleMessage = (
   ws.recipients.add(senderId);
 
   // Notify other users in the room
-  connections.forEach((connection, connUserId) => {
+  connections.forEach(async (connection, connUserId) => {
     if (
       message.recipient === connUserId &&
       connection.readyState === WebSocket.OPEN
     ) {
+      const res = await messageService(
+        message.text,
+        message.sender,
+        message.recipient,
+        message.messageType
+      );
+      if (!res) {
+        console.log("Unable to save the chat");
+      }
       connection.send(
         JSON.stringify({
-          type: "user_joined_room",
-          userId: ws.userId,
-          room: senderId,
+          data: {
+            ...message,
+            id: res._id,
+          },
           timestamp: new Date().toISOString(),
         })
       );
     }
   });
 
-  ws.send(
-    JSON.stringify({
-      type: "room_joined",
-      room: senderId,
-      timestamp: new Date().toISOString(),
-    })
-  );
+//   ws.send(
+//     JSON.stringify({
+//       data: message,
+//       timestamp: new Date().toISOString(),
+//     })
+//   );
 };
 
 const handlePing = (ws: WebSocketConnection) => {
