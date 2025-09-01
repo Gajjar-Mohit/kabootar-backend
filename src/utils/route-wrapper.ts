@@ -11,7 +11,12 @@ export const asyncHandler = (fn: ControllerFunction) => {
     try {
       await fn(req, res, next);
     } catch (error) {
-      next(error);
+      // Only pass to error handler if response hasn't been sent
+      if (!res.headersSent) {
+        next(error);
+      } else {
+        console.error("Error after response sent:", req.originalUrl, error);
+      }
     }
   };
 };

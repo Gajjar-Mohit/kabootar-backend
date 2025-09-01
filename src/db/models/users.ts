@@ -1,4 +1,4 @@
-import { Schema, model, Document, type ObjectId } from "mongoose";
+import { Schema, model, Document } from "mongoose";
 
 // Interface extending Document for better TypeScript support
 export interface IUser extends Document {
@@ -8,9 +8,9 @@ export interface IUser extends Document {
   profileUrl?: string;
   bio?: string;
   online?: boolean;
-  publickey: string;
   createdAt?: Date;
   updatedAt?: Date;
+  clerkId: string;
 }
 
 // Schema definition
@@ -21,6 +21,11 @@ const UserSchema = new Schema<IUser>(
       required: [true, "Name is required"],
       trim: true,
       maxlength: [100, "Name cannot exceed 100 characters"],
+    },
+    clerkId: {
+      type: String,
+      required: [true, "ClerkId is required"],
+      trim: true,
     },
     email: {
       type: String,
@@ -62,12 +67,6 @@ const UserSchema = new Schema<IUser>(
     online: {
       type: Boolean,
       default: false,
-      index: true,
-    },
-    publickey: {
-      type: String,
-      required: [true, "Public key is required"],
-      unique: true,
       index: true,
     },
   },

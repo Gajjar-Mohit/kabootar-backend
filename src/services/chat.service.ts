@@ -1,8 +1,7 @@
-
 import { Message, type IMessage } from "../db/models/messages";
 import type { IUser } from "../db/models/users";
 import { CustomError } from "../utils/error-handler";
-import { getUserByIdService } from "./user.service";
+import { getUserByClerkIdService, getUserByIdService } from "./user.service";
 
 export const messageService = async (
   text: string,

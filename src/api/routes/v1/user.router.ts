@@ -4,6 +4,7 @@ import {
   createUserController,
   deleteUserController,
   getUserByIdController,
+  searchUserController,
 } from "../../controllers/user.controller";
 
 const userRouter = Router();
@@ -11,5 +12,6 @@ const userRouter = Router();
 userRouter.post("/create", asyncHandler(createUserController));
 userRouter.get("/:id", asyncHandler(getUserByIdController));
 userRouter.delete("/:id", asyncHandler(deleteUserController));
+userRouter.post("/search", asyncHandler(searchUserController));
 
 export default userRouter;
