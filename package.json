@@ -4,7 +4,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "bun src/index.ts"
+    "dev": "bun src/index.ts",
+    "start": "bun src/index.ts",
+    "build": "bun install --production"
   },
   "devDependencies": {
     "@types/bun": "latest"
