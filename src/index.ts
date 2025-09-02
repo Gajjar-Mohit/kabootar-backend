@@ -5,7 +5,6 @@ import { errorHandler } from "./utils/error-handler.ts";
 import { connect } from "./db/db.ts";
 import router from "./api/routes/index.ts";
 import { initializeWebSocket } from "./ws/index.ts";
-import { setupWebSocketRoutes } from "./ws/routes.ts";
 import cors from "cors";
 
 const app = express();
@@ -28,9 +27,6 @@ app.use(express.urlencoded({ extended: true }));
 
 // Initialize WebSocket server
 const { wss, connections } = initializeWebSocket(WS_PORT);
-
-// Setup WebSocket-related REST API routes
-setupWebSocketRoutes(app, connections);
 
 // Routes
 app.use("/api/v1", router);

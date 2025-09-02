@@ -113,24 +113,22 @@ const handleMessage = (
       if (!res) {
         console.log("Unable to save the chat");
       }
+
       connection.send(
         JSON.stringify({
           data: {
-            ...message,
             id: res._id,
+            sender: res.sender._id,
+            recipient: res.recipient._id,
+            text: res.text,
+            read: res.read,
+            time: res.createdAt,
+            delivered: res.delivered,
           },
-          timestamp: new Date().toISOString(),
         })
       );
     }
   });
-
-  //   ws.send(
-  //     JSON.stringify({
-  //       data: message,
-  //       timestamp: new Date().toISOString(),
-  //     })
-  //   );
 };
 
 const handlePing = (ws: WebSocketConnection) => {

@@ -77,7 +77,8 @@ export const getMessagesByUserIdAndRecipientId = async (
     return messages.map((value) => {
       return {
         id: value._id,
-        messagerId: userId == value.sender._id ? userId : otherPerson,
+        sender:  value.sender._id,
+        recipient:  value.recipient._id,
         text: value.text,
         read: value.read,
         time: value.createdAt,
