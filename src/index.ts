@@ -4,7 +4,6 @@ import { errorHandler } from "./utils/error-handler.ts";
 
 import { connect } from "./db/db.ts";
 import router from "./api/routes/index.ts";
-import { initializeWebSocket } from "./ws/index.ts";
 import cors from "cors";
 
 const app = express();
@@ -12,7 +11,6 @@ const server = createServer(app);
 
 // Environment variables with defaults
 const PORT = parseInt(process.env.PORT || "3000", 10);
-const WS_PORT = parseInt(process.env.WS_PORT || "8080", 10);
 
 // Middleware
 app.use((req, res, next) => {
@@ -24,9 +22,6 @@ app.use(cors());
 
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
-
-// Initialize WebSocket server
-const { wss, connections } = initializeWebSocket(WS_PORT);
 
 // Routes
 app.use("/api/v1", router);
@@ -42,10 +37,6 @@ app.use(errorHandler);
 // Graceful shutdown
 const gracefulShutdown = () => {
   console.log("Shutting down gracefully...");
-
-  wss.close(() => {
-    console.log("WebSocket server closed");
-  });
 
   server.close(() => {
     console.log("HTTP server closed");
@@ -64,7 +55,6 @@ const startServer = async () => {
 
     server.listen(PORT, () => {
       console.log(`HTTP Server is running on port ${PORT}`);
-      console.log(`WebSocket Server is running on port ${WS_PORT}`);
       console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
     });
   } catch (error) {
@@ -75,4 +65,4 @@ const startServer = async () => {
 
 startServer();
 
-export { app, server, wss, connections };
+export { app, server };
